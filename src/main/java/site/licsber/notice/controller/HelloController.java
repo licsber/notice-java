@@ -1,4 +1,4 @@
-package site.licsber.notice;
+package site.licsber.notice.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
