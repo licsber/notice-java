@@ -8,3 +8,6 @@ target/
 *.iws
 *.iml
 *.ipr
+
+# user info ignore for security
+application.yml

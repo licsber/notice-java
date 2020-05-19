@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "config.memo-bird.ak",
+      "type": "java.lang.String",
+      "description": "咕咕机开发者签名（ak）."
+    }
+  ]
+}
