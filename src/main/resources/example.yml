@@ -1,0 +1,23 @@
+# change this filename to application.yml !
+# prod env by default
+spring:
+  profiles:
+    active: prod
+  application:
+    name: notice
+server:
+  port: 9999
+config:
+  memo-bird:
+    ak: insert-your-ak-here
+
+---
+spring:
+  profiles: dev
+  application:
+    name: notice
+server:
+  port: 8888
+config:
+  memo-bird:
+    ak: insert-your-ak-here
