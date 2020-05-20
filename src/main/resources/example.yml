@@ -5,6 +5,13 @@ spring:
     active: prod
   application:
     name: notice
+  data:
+    mongodb:
+      username: user
+      password: pwd
+      port: post
+      host: host
+      database: notice
 server:
   port: 9999
 config:
@@ -16,6 +23,10 @@ spring:
   profiles: dev
   application:
     name: notice
+  data:
+    mongodb:
+      host: localhost
+      database: notice
 server:
   port: 8888
 config:
