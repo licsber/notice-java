@@ -47,20 +47,21 @@ public class SetUserBindServiceImpl implements SetUserBindService {
             userBind.setStatus("请求过于频繁");
         } else {
             UserBindRes res = template.postForObject(url, req, UserBindRes.class);
+            System.out.println(res);
 
             if (res == null) {
                 logger.warn("MemoBird server error");
                 userBindRepository.delete(userBind);
                 userBind.setStatus("对方服务器错误");
-            } else if (res.getShowapi_res_code() == 1) {
+            } else if (res.getShowApiResCode() == 1) {
                 userBind.setSuc(true);
-                userBind.setUserID(res.getShowapi_userid());
+                userBind.setUserID(res.getShowApiUserId());
                 logger.info("suc for UserBind " + userBind);
                 userBindRepository.save(userBind);
             } else {
                 logger.info("err for UserBind " + res);
                 userBindRepository.delete(userBind);
-                userBind.setStatus(res.getShowapi_res_error());
+                userBind.setStatus(res.getShowApiResError());
             }
         }
 

@@ -1,12 +1,16 @@
 package site.licsber.notice.model.memobird;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class UserBindRes {
 
-    private int showapi_res_code;
-    private String showapi_res_error;
-    private String showapi_userid;
+    @JsonProperty("showapi_res_code")
+    private int showApiResCode;
+    @JsonProperty("showapi_res_error")
+    private String showApiResError;
+    @JsonProperty("showapi_userid")
+    private String showApiUserId;
 
 }

@@ -1,5 +1,7 @@
 package site.licsber.notice.memobird;
 
+import org.hamcrest.Matchers;
+import org.hamcrest.core.AnyOf;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -64,8 +66,13 @@ public class SetUserBindServiceTests {
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers
-                        .jsonPath("status")
-                        .value("请求过于频繁"))
+                        .jsonPath("status",
+                                AnyOf.anyOf(
+                                        Matchers.equalTo("请求过于频繁"),
+                                        Matchers.equalTo("咕咕机未激活或者未绑定")
+                                )
+                        )
+                )
                 .andDo(MockMvcResultHandlers.print());
     }
 
