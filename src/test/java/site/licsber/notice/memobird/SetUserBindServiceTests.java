@@ -43,8 +43,9 @@ public class SetUserBindServiceTests {
                 .param("memoBirdId", "")
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(""))
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("status")
+                        .value("MemoBirdId不合法"))
                 .andDo(MockMvcResultHandlers.print());
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -52,8 +53,19 @@ public class SetUserBindServiceTests {
                 .param("memoBirdId", "fb93bfff504c020a")
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(""))
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("status")
+                        .value("咕咕机未激活或者未绑定"))
+                .andDo(MockMvcResultHandlers.print());
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/v1/bind")
+                .param("memoBirdId", "fb93bfff504c020a")
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("status")
+                        .value("请求过于频繁"))
                 .andDo(MockMvcResultHandlers.print());
     }
 

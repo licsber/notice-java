@@ -2,6 +2,8 @@ package site.licsber.notice.model.memobird;
 
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -9,6 +11,8 @@ import site.licsber.notice.util.DateUtils;
 import site.licsber.notice.util.MemoBirdUtils;
 
 @Data
+// https://docs.spring.io/spring-data/data-mongodb/docs/current/reference/html/#mongo-template.type-mapping
+@TypeAlias("bind")
 @Document(collection = "bind")
 public class UserBind {
 
@@ -26,5 +30,8 @@ public class UserBind {
 
     @Field("uId")
     private String userID;
+
+    @Transient
+    private String status;
 
 }

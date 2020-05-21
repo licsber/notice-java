@@ -26,13 +26,15 @@ public class MemoBirdController {
 
     @PostMapping("/bind")
     public UserBind bind(@RequestParam String memoBirdId, HttpServletResponse response) {
+        UserBind userBind = new UserBind(memoBirdId);
         if (!MemoBirdUtils.isMemoBirdIdValid(memoBirdId)) {
-            return null;
+            userBind.setStatus("MemoBirdId不合法");
+            return userBind;
         }
+
         Cookie cookie = new Cookie("memoBirdId", memoBirdId);
         cookie.setMaxAge(365 * 24 * 60 * 60);
         response.addCookie(cookie);
-        UserBind userBind = new UserBind(memoBirdId);
         return setUserBindService.setUserBind(userBind);
     }
 

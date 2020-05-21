@@ -1,5 +1,6 @@
 package site.licsber.notice.service.impl.memobird;
 
+import com.google.common.util.concurrent.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class SetUserBindServiceImpl implements SetUserBindService {
 
     private final UserBindRepository userBindRepository;
 
+    @SuppressWarnings("UnstableApiUsage")
+    private final RateLimiter rateLimiter = RateLimiter.create(0.5);
+
     private static final Logger logger = LoggerFactory.getLogger(SetUserBindServiceImpl.class);
 
     public SetUserBindServiceImpl(MemoBirdConfig config, UserBindRepository userBindRepository) {
@@ -28,6 +32,7 @@ public class SetUserBindServiceImpl implements SetUserBindService {
         this.userBindRepository = userBindRepository;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     private UserBind retrieveUserId(UserBind userBind) {
         Map<String, String> req = new HashMap<>();
         req.put("ak", config.getAk());
@@ -36,30 +41,37 @@ public class SetUserBindServiceImpl implements SetUserBindService {
         req.put("useridentifying", userBind.getUserIdentifying());
 
         RestTemplate template = new RestTemplate();
-        UserBindRes res = template.postForObject(url, req, UserBindRes.class);
-        if (res == null) {
-            logger.warn("MemoBird server error");
+
+        if (!rateLimiter.tryAcquire()) {
             userBindRepository.delete(userBind);
-            return null;
+            userBind.setStatus("请求过于频繁");
+        } else {
+            UserBindRes res = template.postForObject(url, req, UserBindRes.class);
+
+            if (res == null) {
+                logger.warn("MemoBird server error");
+                userBindRepository.delete(userBind);
+                userBind.setStatus("对方服务器错误");
+            } else if (res.getShowapi_res_code() == 1) {
+                userBind.setSuc(true);
+                userBind.setUserID(res.getShowapi_userid());
+                logger.info("suc for UserBind " + userBind);
+                userBindRepository.save(userBind);
+            } else {
+                logger.info("err for UserBind " + res);
+                userBindRepository.delete(userBind);
+                userBind.setStatus(res.getShowapi_res_error());
+            }
         }
 
-        if (res.getShowapi_res_code() == 1) {
-            userBind.setSuc(true);
-            userBind.setUserID(res.getShowapi_userid());
-            logger.info("suc for UserBind " + userBind);
-            return userBindRepository.save(userBind);
-        } else {
-            logger.info("err for UserBind " + res);
-            userBindRepository.delete(userBind);
-            return null;
-        }
+        return userBind;
     }
 
     @Override
     public UserBind setUserBind(UserBind userBind) {
         UserBind tmp = userBindRepository.findByMemoBirdID(userBind.getMemoBirdID());
         if (tmp != null && tmp.isSuc()) {
-            logger.info("UserBind exists " + userBind);
+            logger.info("UserBind exists " + tmp);
             return tmp;
         }
         return retrieveUserId(userBind);
