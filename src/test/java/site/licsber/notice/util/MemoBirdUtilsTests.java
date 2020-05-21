@@ -19,4 +19,9 @@ public class MemoBirdUtilsTests {
         Assertions.assertTrue(MemoBirdUtils.isMemoBirdIdValid("aaba7901a443aaaa"));
     }
 
+    @Test
+    void randomUserIdentify() {
+        Assertions.assertEquals(12, MemoBirdUtils.randomUserIdentify().length());
+    }
+
 }
