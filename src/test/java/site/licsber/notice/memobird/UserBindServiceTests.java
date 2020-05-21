@@ -5,30 +5,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import site.licsber.notice.model.memobird.UserBind;
-import site.licsber.notice.service.impl.memobird.UserBindServiceImpl;
+import site.licsber.notice.repository.memobird.UserBindRepository;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserBindServiceTests {
 
     @Autowired
-    private UserBindServiceImpl ser;
+    private UserBindRepository userBindRepository;
 
     @Autowired
     private MongoTemplate template;
 
+    final String validString = "aaba7901a443aaaa";
+
     @BeforeAll
     void init() {
-        UserBind userBind = new UserBind();
-        userBind.setMemobirdID("123");
-        ser.saveUserBind(userBind);
+        UserBind userBind = new UserBind("123");
+        userBindRepository.save(userBind);
 
-        userBind = new UserBind();
-        ser.saveUserBind(userBind);
+        userBind = new UserBind("");
+        userBindRepository.save(userBind);
 
-        userBind = new UserBind();
-        userBind.setMemobirdID("aaba7901a443aaaa");
-        ser.saveUserBind(userBind);
+        userBind = new UserBind(validString);
+        userBindRepository.save(userBind);
     }
 
     @AfterAll
@@ -39,16 +39,16 @@ public class UserBindServiceTests {
 
     @Test
     void findUserBindByMemoBirdId() {
-        Assertions.assertNull(ser.findUserBindByMemoBirdId("23"));
-        Assertions.assertNull(ser.findUserBindByMemoBirdId("123"));
-        Assertions.assertNotNull(ser.findUserBindByMemoBirdId("aaba7901a443aaaa"));
+        Assertions.assertNull(userBindRepository.findByMemoBirdID("23"));
+        Assertions.assertNotNull(userBindRepository.findByMemoBirdID("123"));
+        Assertions.assertNotNull(userBindRepository.findByMemoBirdID(validString));
     }
 
     @Test
     void deleteUserBindByMemoBirdId() {
-        Assertions.assertNotNull(ser.findUserBindByMemoBirdId("aaba7901a443aaaa"));
-        ser.deleteUserBindByMemoBirdId("aaba7901a443aaaa");
-        Assertions.assertNull(ser.findUserBindByMemoBirdId("aaba7901a443aaaa"));
+        Assertions.assertNotNull(userBindRepository.findByMemoBirdID(validString));
+        userBindRepository.deleteByMemoBirdID(validString);
+        Assertions.assertNull(userBindRepository.findByMemoBirdID(validString));
     }
 
 }

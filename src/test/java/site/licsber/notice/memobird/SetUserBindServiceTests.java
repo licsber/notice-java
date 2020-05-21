@@ -6,24 +6,23 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import site.licsber.notice.model.memobird.UserBind;
+import site.licsber.notice.repository.memobird.UserBindRepository;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SetUserBindServiceTests {
 
     @Autowired
-    private MongoTemplate template;
+    private WebApplicationContext webApplicationContext;
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private UserBindRepository userBindRepository;
 
     private MockMvc mockMvc;
 
@@ -34,8 +33,7 @@ public class SetUserBindServiceTests {
 
     @AfterAll
     void after() {
-        System.out.println(template.findAll(UserBind.class));
-        template.dropCollection(UserBind.class);
+        userBindRepository.deleteAll();
     }
 
     @Test
@@ -51,7 +49,7 @@ public class SetUserBindServiceTests {
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/v1/bind")
-                .param("memoBirdId", "aaba7901a443aaaa")
+                .param("memoBirdId", "fb93bfff504c020a")
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content()

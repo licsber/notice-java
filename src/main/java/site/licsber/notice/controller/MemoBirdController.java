@@ -1,6 +1,5 @@
 package site.licsber.notice.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 @V1RestController
 public class MemoBirdController {
 
-    @Autowired
-    private SetUserBindServiceImpl setUserBindService;
+    private final SetUserBindServiceImpl setUserBindService;
+
+    public MemoBirdController(SetUserBindServiceImpl setUserBindService) {
+        this.setUserBindService = setUserBindService;
+    }
 
     @RequestMapping("/")
     public String index() {
@@ -28,9 +30,9 @@ public class MemoBirdController {
             return null;
         }
         Cookie cookie = new Cookie("memoBirdId", memoBirdId);
+        cookie.setMaxAge(365 * 24 * 60 * 60);
         response.addCookie(cookie);
-        UserBind userBind = new UserBind();
-        userBind.setMemobirdID(memoBirdId);
+        UserBind userBind = new UserBind(memoBirdId);
         return setUserBindService.setUserBind(userBind);
     }
 
