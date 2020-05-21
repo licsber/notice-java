@@ -2,9 +2,9 @@ package site.licsber.notice.model.memobird;
 
 import lombok.Data;
 import lombok.NonNull;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 import site.licsber.notice.util.DateUtils;
 import site.licsber.notice.util.MemoBirdUtils;
 
@@ -12,8 +12,7 @@ import site.licsber.notice.util.MemoBirdUtils;
 @Document(collection = "bind")
 public class UserBind {
 
-    @Id
-    @Field("mId")
+    @MongoId
     @NonNull
     private String memoBirdID;
 
