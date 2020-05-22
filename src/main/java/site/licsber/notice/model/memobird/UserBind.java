@@ -2,7 +2,9 @@ package site.licsber.notice.model.memobird;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,6 +16,8 @@ import site.licsber.notice.util.MemoBirdUtils;
 @Data
 // https://docs.spring.io/spring-data/data-mongodb/docs/current/reference/html/#mongo-template.type-mapping
 @TypeAlias("bind")
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Document(collection = "bind")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserBind {

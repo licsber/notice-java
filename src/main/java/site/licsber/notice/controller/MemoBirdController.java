@@ -25,13 +25,12 @@ public class MemoBirdController {
     }
 
     @PostMapping("/bind")
-    public UserBind bind(@RequestParam String memoBirdId, HttpServletResponse response) {
-        UserBind userBind = new UserBind(memoBirdId);
+    public UserBind bind(@RequestParam String memoBirdId, HttpServletResponse response, UserBind userBind) {
+        userBind.setMemoBirdID(memoBirdId);
         if (!MemoBirdUtils.isMemoBirdIdValid(memoBirdId)) {
             userBind.setStatus("MemoBirdId不合法");
             return userBind;
         }
-
         Cookie cookie = new Cookie("memoBirdId", memoBirdId);
         cookie.setMaxAge(365 * 24 * 60 * 60);
         response.addCookie(cookie);

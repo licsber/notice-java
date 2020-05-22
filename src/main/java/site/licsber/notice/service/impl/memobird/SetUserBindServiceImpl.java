@@ -1,8 +1,7 @@
 package site.licsber.notice.service.impl.memobird;
 
 import com.google.common.util.concurrent.RateLimiter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import site.licsber.notice.model.memobird.MemoBirdConfig;
@@ -15,6 +14,7 @@ import site.licsber.notice.util.DateUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class SetUserBindServiceImpl implements SetUserBindService {
 
@@ -24,8 +24,6 @@ public class SetUserBindServiceImpl implements SetUserBindService {
 
     @SuppressWarnings("UnstableApiUsage")
     private final RateLimiter rateLimiter = RateLimiter.create(0.5);
-
-    private static final Logger logger = LoggerFactory.getLogger(SetUserBindServiceImpl.class);
 
     public SetUserBindServiceImpl(MemoBirdConfig config, UserBindRepository userBindRepository) {
         this.config = config;
@@ -47,19 +45,19 @@ public class SetUserBindServiceImpl implements SetUserBindService {
             userBind.setStatus("请求过于频繁");
         } else {
             UserBindRes res = template.postForObject(url, req, UserBindRes.class);
-            System.out.println(res);
+            log.debug("res: " + res);
 
             if (res == null) {
-                logger.warn("MemoBird server error");
+                log.warn("MemoBird server error");
                 userBindRepository.delete(userBind);
                 userBind.setStatus("对方服务器错误");
             } else if (res.getShowApiResCode() == 1) {
                 userBind.setSuc(true);
                 userBind.setUserID(res.getShowApiUserId());
-                logger.info("suc for UserBind " + userBind);
+                log.info("suc for UserBind " + userBind);
                 userBindRepository.save(userBind);
             } else {
-                logger.info("err for UserBind " + res);
+                log.info("err for UserBind " + res);
                 userBindRepository.delete(userBind);
                 userBind.setStatus(res.getShowApiResError());
             }
@@ -72,7 +70,7 @@ public class SetUserBindServiceImpl implements SetUserBindService {
     public UserBind setUserBind(UserBind userBind) {
         UserBind tmp = userBindRepository.findByMemoBirdID(userBind.getMemoBirdID());
         if (tmp != null && tmp.isSuc()) {
-            logger.info("UserBind exists " + tmp);
+            log.info("UserBind exists " + tmp);
             return tmp;
         }
         return retrieveUserId(userBind);
