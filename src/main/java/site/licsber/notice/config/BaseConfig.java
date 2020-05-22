@@ -1,8 +1,9 @@
-package site.licsber.notice.controller;
+package site.licsber.notice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import site.licsber.notice.controller.V1RestController;
 
 @Configuration
 public class BaseConfig implements WebMvcConfigurer {

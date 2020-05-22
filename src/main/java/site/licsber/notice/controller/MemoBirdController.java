@@ -28,7 +28,7 @@ public class MemoBirdController {
     public UserBind bind(@RequestParam String memoBirdId, HttpServletResponse response, UserBind userBind) {
         userBind.setMemoBirdID(memoBirdId);
         if (!MemoBirdUtils.isMemoBirdIdValid(memoBirdId)) {
-            userBind.setStatus("MemoBirdId不合法");
+            userBind.setStatus("MemoBirdId不合法.");
             return userBind;
         }
         Cookie cookie = new Cookie("memoBirdId", memoBirdId);

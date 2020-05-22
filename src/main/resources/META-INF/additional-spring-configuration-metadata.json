@@ -4,6 +4,11 @@
       "name": "config.memo-bird.ak",
       "type": "java.lang.String",
       "description": "咕咕机开发者签名（ak）."
+    },
+    {
+      "name": "config.token",
+      "type": "java.lang.String",
+      "description": "接口鉴权Token."
     }
   ]
 }

@@ -42,7 +42,7 @@ public class SetUserBindServiceImpl implements SetUserBindService {
 
         if (!rateLimiter.tryAcquire()) {
             userBindRepository.delete(userBind);
-            userBind.setStatus("请求过于频繁");
+            userBind.setStatus("请求过于频繁.");
         } else {
             UserBindRes res = template.postForObject(url, req, UserBindRes.class);
             log.debug("res: " + res);
@@ -50,10 +50,11 @@ public class SetUserBindServiceImpl implements SetUserBindService {
             if (res == null) {
                 log.warn("MemoBird server error");
                 userBindRepository.delete(userBind);
-                userBind.setStatus("对方服务器错误");
+                userBind.setStatus("对方服务器错误.");
             } else if (res.getShowApiResCode() == 1) {
                 userBind.setSuc(true);
                 userBind.setUserID(res.getShowApiUserId());
+                userBind.setStatus("成功获取UserId.");
                 log.info("suc for UserBind " + userBind);
                 userBindRepository.save(userBind);
             } else {

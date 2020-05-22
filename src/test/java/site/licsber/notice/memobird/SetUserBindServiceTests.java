@@ -37,7 +37,7 @@ public class SetUserBindServiceTests {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers
                         .jsonPath("status")
-                        .value("MemoBirdId不合法"))
+                        .value("MemoBirdId不合法."))
                 .andDo(MockMvcResultHandlers.print());
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -58,7 +58,7 @@ public class SetUserBindServiceTests {
                 .andExpect(MockMvcResultMatchers
                         .jsonPath("status",
                                 AnyOf.anyOf(
-                                        Matchers.equalTo("请求过于频繁"),
+                                        Matchers.equalTo("请求过于频繁."),
                                         Matchers.equalTo("咕咕机未激活或者未绑定")
                                 )
                         )
