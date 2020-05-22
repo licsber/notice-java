@@ -3,19 +3,15 @@ package site.licsber.notice.memobird;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import site.licsber.notice.model.memobird.UserBind;
 import site.licsber.notice.repository.memobird.UserBindRepository;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class UserBindServiceTests {
+public class UserBindRepositoryTests {
 
     @Autowired
     private UserBindRepository userBindRepository;
-
-    @Autowired
-    private MongoTemplate template;
 
     final String validString = "aaba7901a443aaaa";
 
@@ -33,8 +29,10 @@ public class UserBindServiceTests {
 
     @AfterAll
     void after() {
-        System.out.println(template.findAll(UserBind.class));
-        template.dropCollection(UserBind.class);
+        userBindRepository.deleteByMemoBirdID("");
+        userBindRepository.deleteByMemoBirdID("123");
+        Assertions.assertNull(userBindRepository.findByMemoBirdID("123"));
+        Assertions.assertNull(userBindRepository.findByMemoBirdID(""));
     }
 
     @Test

@@ -2,7 +2,6 @@ package site.licsber.notice.memobird;
 
 import org.hamcrest.Matchers;
 import org.hamcrest.core.AnyOf;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,7 +13,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import site.licsber.notice.repository.memobird.UserBindRepository;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -23,19 +21,11 @@ public class SetUserBindServiceTests {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Autowired
-    private UserBindRepository userBindRepository;
-
     private MockMvc mockMvc;
 
     @BeforeAll
     void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    @AfterAll
-    void after() {
-        userBindRepository.deleteAll();
     }
 
     @Test
